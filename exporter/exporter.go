@@ -7,7 +7,6 @@ import (
 	"github.com/it1804/kafka-bridge_exporter/config"
 	"github.com/mitchellh/mapstructure"
 	"github.com/prometheus/client_golang/prometheus"
-	_ "log"
 	"net/http"
 	"time"
 )
