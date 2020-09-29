@@ -42,9 +42,6 @@ func main() {
 		conf.Metrics.Path = "/metrics"
 	}
 
-	//    b, _ := json.MarshalIndent(conf, "", "  ")
-	//    log.Printf("Running config: %s\n", string(b))
-
 	kb := exporter.NewCollector(conf)
 	prometheus.MustRegister(kb)
 

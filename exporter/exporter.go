@@ -17,7 +17,7 @@ type collector struct {
 	queueBytesMetric *prometheus.Desc
 	errMetric        *prometheus.Desc
 	txmsgsMetric     *prometheus.Desc
-	txmsgsBytesMetric     *prometheus.Desc
+	txmsgBytesMetric *prometheus.Desc
 	conf             *config.ExporterServiceList
 	client           *http.Client
 }
@@ -51,7 +51,7 @@ func NewCollector(config *config.ExporterServiceList) *collector {
 			"Shows delivered messages count",
 			[]string{"instance_id", "service_name"}, nil,
 		),
-		txmsgsBytesMetric: prometheus.NewDesc("kafka_bridge_delivered_messages_bytes",
+		txmsgBytesMetric: prometheus.NewDesc("kafka_bridge_delivered_messages_bytes",
 			"Shows delivered bytes with messages",
 			[]string{"instance_id", "service_name"}, nil,
 		),
@@ -64,7 +64,7 @@ func (collector *collector) Describe(ch chan<- *prometheus.Desc) {
 	ch <- collector.queueBytesMetric
 	ch <- collector.errMetric
 	ch <- collector.txmsgsMetric
-	ch <- collector.txmsgsBytesMetric
+	ch <- collector.txmsgBytesMetric
 }
 
 func (collector *collector) Collect(ch chan<- prometheus.Metric) {
@@ -82,13 +82,13 @@ func (collector *collector) Collect(ch chan<- prometheus.Metric) {
 			msg_size := stat.Services[i].Output.Msg_size
 			errors_cnt := stat.Services[i].Output.Errors
 			txmsgs_cnt := stat.Services[i].Output.Txmsgs
-			txmsgs_bytes := stat.Services[i].Output.Txmsg_bytes
+			txmsg_bytes := stat.Services[i].Output.Txmsg_bytes
 			ch <- prometheus.MustNewConstMetric(collector.tpmMetric, prometheus.CounterValue, float64(total_cnt), instance, name)
 			ch <- prometheus.MustNewConstMetric(collector.queueMetric, prometheus.GaugeValue, float64(msg_cnt), instance, name)
 			ch <- prometheus.MustNewConstMetric(collector.queueBytesMetric, prometheus.GaugeValue, float64(msg_size), instance, name)
 			ch <- prometheus.MustNewConstMetric(collector.errMetric, prometheus.CounterValue, float64(errors_cnt), instance, name)
 			ch <- prometheus.MustNewConstMetric(collector.txmsgsMetric, prometheus.CounterValue, float64(txmsgs_cnt), instance, name)
-			ch <- prometheus.MustNewConstMetric(collector.txmsgsBytesMetric, prometheus.CounterValue, float64(txmsgs_bytes), instance, name)
+			ch <- prometheus.MustNewConstMetric(collector.txmsgBytesMetric, prometheus.CounterValue, float64(txmsg_bytes), instance, name)
 		}
 	}
 }

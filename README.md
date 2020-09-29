@@ -1,3 +1,3 @@
-External exporter prometheus metrics utility for https://github.com/it1804/kafka-bridge
+External prometheus metrics exporter utility for https://github.com/it1804/kafka-bridge
 
-go get github.com/it1804/kafka-bridge_exporter
+go get -u github.com/it1804/kafka-bridge_exporter
